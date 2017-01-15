@@ -41,7 +41,7 @@ def add_local_python_path(file):
 			elif 'basepython' in line:
 				print(line.replace(line, LOCAL_PYTHON))
 			else:
-				print(line)
+				print(line, end='')
 
 def find_files(path, filter):
 	for root, dirs, files in os.walk(path):
@@ -57,14 +57,15 @@ def find_dirs(path, depth):
 				yield os.path.join(root, dir)
 
 def run_tox_tests():
-	print(script_dir_path)
 	for file in find_files(script_dir_path, 'tox.ini'):
-		print(file)
+		print('Add local python path to file: \n' + file)
 		add_local_python_path(file)
 	for dir in find_dirs(script_dir_path, ''):
-		print(dir)
+		command = 'tox -e py3 > test_res_mod.txt'
 		with cd(dir):
-			os.system('tox -e py3.6 > test_res_mod.txt')
+			print('Running tox command under: \n' + dir)
+			print(command)
+			os.system('tox -e py3 > test_res_mod.txt')
 
 
 def runner():
